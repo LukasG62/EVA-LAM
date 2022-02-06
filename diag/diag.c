@@ -23,7 +23,7 @@ int main(int argc, char *argv[]){
     
     char fen[MAX_FEN];
     int diag_id; // numéro du diagramme
-    octet j= 0; // compteur pour parcourir le fen
+    octet fenpos= 0; // compteur pour parcourir le fen
     octet i = 0; // compteur pour parcourir le plateau
     octet nb_evolution; // pour compter le nombre de bonus 
     
@@ -38,9 +38,9 @@ int main(int argc, char *argv[]){
         strcpy(fen, argv[2]);
     }
     // parcours du fen
-    while(fen[j]) {
+    while(fen[fenpos]!= j  || fen[fenpos]!= r) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
         // TODO reflechir à comment faire les vérifications
-        switch(fen[j]){
+        switch(fen[fenpos]){
             // cas pour les pions jaunes
             case 'u':
                 placer_colonne(&plateau, i, U, JAU);
@@ -113,8 +113,10 @@ int main(int argc, char *argv[]){
                  nb_evolution++;
                  break;
             
-            //TODO cas pour le trait (caractère après l'espace)
+            //TODO cas pour le trait (caractère après l'espace)  
             case ' ':
+                if (fen[fenpos+1] != j  || fen[fenpos+1]!= r) // si l'espace n'est pas celui du trait
+                    i++;
                 break;
             
             //TODO Caractère inconnu ou gestion du nombre de case vide ??
@@ -122,8 +124,12 @@ int main(int argc, char *argv[]){
                 break;
             
         }
-        j++;
+        fenpos++;
     }
+    if (fen[fenpos] == 'r') // si le trait est au rouge
+        p->trait = ROU ;
+    else // il est forcément jaune (cas d'erreur mettra le trait a jaune car pas de vérif avec j)
+        p->trait = JAU ;
     for(i; i < NBCASES; i++) placer_colonne(&plateau, i, VIDE, VIDE);
     afficherPosition(plateau); // à retirer
 }
@@ -142,12 +148,16 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     if(type == MALUS){
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU) p->evolution.malusJ = col;
+        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         else if(c == ROU) p->evolution.malusR = col;
+        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
     }
     // Sinon c'est un bonus
     else {
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU) p->evolution.bonusJ = col;
+        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         else if(c == ROU) p->evolution.bonusR = col;
+        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
     }
 }
