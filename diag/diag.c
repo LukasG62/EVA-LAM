@@ -18,6 +18,8 @@
 
 void placer_colonne(T_Position *p, octet col, octet nb, octet c);
 void placer_evolution(T_Position *p, octet col, octet type, octet c);
+
+
 int main(int argc, char *argv[]){
     T_Position plateau;
     
@@ -25,7 +27,13 @@ int main(int argc, char *argv[]){
     int diag_id; // numéro du diagramme
     octet fenpos= 0; // compteur pour parcourir le fen
     octet i = 0; // compteur pour parcourir le plateau
-    octet nb_evolution; // pour compter le nombre de bonus 
+    
+    // Initialisation des pions évolutions
+	plateau.evolution.bonusJ = UNKNOWN;
+	plateau.evolution.bonusR = UNKNOWN;
+	plateau.evolution.malusJ = UNKNOWN;
+	plateau.evolution.malusR = UNKNOWN;
+
     
     // vérification du nombre d'arguments
     if(argc != 3) {
@@ -69,12 +77,10 @@ int main(int argc, char *argv[]){
                 
             case 'b':
                 placer_evolution(&plateau, i-1, BONUS, JAU);
-                nb_evolution++;
                 break;
                 
             case 'm':
                 placer_evolution(&plateau, i-1, MALUS, JAU);
-                nb_evolution++;
                 break;
             
             // cas pour les pion Rouge
@@ -105,12 +111,10 @@ int main(int argc, char *argv[]){
             
             case 'B':
                  placer_evolution(&plateau, i-1, BONUS, ROU);
-                 nb_evolution++;
                  break;
             
             case 'M':
                  placer_evolution(&plateau, i-1, MALUS, ROU);
-                 nb_evolution++;
                  break;
             
             //TODO cas pour le trait (caractère après l'espace)  
@@ -150,11 +154,15 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     if(type == MALUS){
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU){
+            if(p->evolution.malusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+            
             p->evolution.malusJ = col;
             printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         }
         else {
-            if(c == ROU) { 
+            if(c == ROU) {
+                if(p->evolution.malusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+                
                 p->evolution.malusR = col;
                 printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
             }
@@ -164,11 +172,15 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     else {
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU) {
+            if(p->evolution.bonusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+            
             p->evolution.bonusJ = col;
             printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         }
         else {
-            if(c == ROU) { 
+            if(c == ROU) {
+                if(p->evolution.bonusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+                
                 p->evolution.bonusR = col;
                 printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
             }
