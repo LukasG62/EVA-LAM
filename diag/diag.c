@@ -148,6 +148,6 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     else {
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU) p->evolution.bonusJ = col;
-        else if(C == ROU) p->evolution.bonusR = col;
+        else if(c == ROU) p->evolution.bonusR = col;
     }
 }
