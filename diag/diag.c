@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
         strcpy(fen, argv[2]);
     }
     // parcours du fen
-    while(fen[fenpos]!= j  || fen[fenpos]!= r) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
+    while(fen[fenpos]) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
         // TODO reflechir à comment faire les vérifications
         switch(fen[fenpos]){
             // cas pour les pions jaunes
@@ -115,24 +115,25 @@ int main(int argc, char *argv[]){
             
             //TODO cas pour le trait (caractère après l'espace)  
             case ' ':
-                if (fen[fenpos+1] != j  || fen[fenpos+1]!= r) // si l'espace n'est pas celui du trait
-                    i++;
+                if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') break; // si l'espace n'est pas celui du trait
+                
+                if (fen[fenpos+1] == 'r') // si le trait est au rouge
+                    plateau.trait = ROU ;
+                else // il est forcément jaune (cas d'erreur mettra le trait a jaune car pas de vérif avec j)
+                    plateau.trait = JAU ;
                 break;
             
             //TODO Caractère inconnu ou gestion du nombre de case vide ??
             default:
-                printf("Charactère %d non pris en charge, suite de l'analyse du FEN",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
+                //printf("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
                 break;
             
         }
         fenpos++;
     }
-    if (fen[fenpos] == 'r') // si le trait est au rouge
-        p->trait = ROU ;
-    else // il est forcément jaune (cas d'erreur mettra le trait a jaune car pas de vérif avec j)
-        p->trait = JAU ;
     for(i; i < NBCASES; i++) placer_colonne(&plateau, i, VIDE, VIDE);
     afficherPosition(plateau); // à retirer
+    printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 }
 
 void placer_colonne(T_Position *p,octet col, octet nb, octet c){
@@ -148,17 +149,29 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     // passage par adresse donc p est modifié
     if(type == MALUS){
         //On place notre pion evolution dans le plateau selon sa couleur
-        if(c == JAU) p->evolution.malusJ = col;
-        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
-        else if(c == ROU) p->evolution.malusR = col;
-        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+        if(c == JAU){
+            p->evolution.malusJ = col;
+            printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+        }
+        else {
+            if(c == ROU) { 
+                p->evolution.malusR = col;
+                printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+            }
+        }
     }
     // Sinon c'est un bonus
     else {
         //On place notre pion evolution dans le plateau selon sa couleur
-        if(c == JAU) p->evolution.bonusJ = col;
-        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
-        else if(c == ROU) p->evolution.bonusR = col;
-        printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+        if(c == JAU) {
+            p->evolution.bonusJ = col;
+            printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+        }
+        else {
+            if(c == ROU) { 
+                p->evolution.bonusR = col;
+                printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
+            }
+        }
     }
 }
