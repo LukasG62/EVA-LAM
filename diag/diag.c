@@ -121,6 +121,7 @@ int main(int argc, char *argv[]){
             
             //TODO Caractère inconnu ou gestion du nombre de case vide ??
             default:
+                printf("Charactère %d non pris en charge, suite de l'analyse du FEN",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
                 break;
             
         }
