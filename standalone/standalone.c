@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
 	strcpy(file_location, argv[1]);
     }
 	
-    printf("\t\t EVA-LAM PROTOtYPE 01\n");
+    printf("\t\t EVA-LAM PROTOTYPE 01\n");
     printf("\t\t --------------------\n");
     printf("Emplacement du fichier js : '%s' \n", file_location);
     printf("DEBUG : OFF"); // TODO debug mode
