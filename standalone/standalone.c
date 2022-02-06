@@ -40,14 +40,14 @@ int main(int argc, char *argv[]) {
     printf("Placement des bonus/malus :\n");
     
     // Placement des bonus/malus avec vérification des saisies
-    do{
+    do{ // Placement bonus Jaune
 	printf("\tbonusJ :");
 	scanf("%d",&pbonus);
 	plateau.evolution.bonusJ = pbonus;
 	printf("la valeur donnée est : %d\n",plateau.evolution.bonusJ);
     }while(plateau.cols[pbonus].couleur != JAU);
     
-    do{
+    do{ // Placement bonus Rouge
 	printf("\tbonusR :");
 	scanf("%d",&pbonus);
 	plateau.evolution.bonusR = pbonus;
@@ -55,14 +55,14 @@ int main(int argc, char *argv[]) {
     
     printf("la valeur donnée est : %d\n",plateau.evolution.bonusR);
 
-    do{
+    do{ // Placement malus Rouge
 	printf("\tmalusR :");
 	scanf("%d",&pbonus);
 	plateau.evolution.malusR = pbonus;
     }while((plateau.evolution.malusR == plateau.evolution.bonusR) || (plateau.cols[pbonus].couleur != ROU));
     printf("la valeur donnée est : %d\n",plateau.evolution.malusR);
     
-    do{
+    do{ // Placement malus Jaune
     	printf("\tmalusJ :");
     	scanf("%d",&pbonus);
     	plateau.evolution.malusJ = pbonus;
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-int ecraserJson(T_Position p, T_Score s, char *flocation){
+int ecraserJson(T_Position p, T_Score s, char *flocation){ //update du fichier Jason en fonction de l'avancement de la partie
 	octet i;
 	FILE *fic=NULL; // Pointeur de notre fichier
 	fic=fopen(flocation,"w"); // Ouverture du fichier en mode écriture avec écrasement
