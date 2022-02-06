@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "avalam.h"
 #include "topologie.h"
 
 #define DEFAULT_NAME "diag.js"
 #define DEFAULT_NOTE ""
 #define MAX_FEN 100
+#define MAX_FENNBVIDE 4
 
 #define U 1
 #define D 2
@@ -19,14 +21,15 @@
 void placer_colonne(T_Position *p, octet col, octet nb, octet c);
 void placer_evolution(T_Position *p, octet col, octet type, octet c);
 
-
 int main(int argc, char *argv[]){
     T_Position plateau;
     
     char fen[MAX_FEN];
+    char fen_nbVide[MAX_FENNBVIDE] = ""; // Nombre de case vide indiqué dans le fen
     int diag_id; // numéro du diagramme
     octet fenpos= 0; // compteur pour parcourir le fen
-    octet i = 0; // compteur pour parcourir le plateau
+    octet col = 0; // compteur pour parcourir le plateau
+    octet i;
     
     // Initialisation des pions évolutions
 	plateau.evolution.bonusJ = UNKNOWN;
@@ -51,71 +54,87 @@ int main(int argc, char *argv[]){
         switch(fen[fenpos]){
             // cas pour les pions jaunes
             case 'u':
-                placer_colonne(&plateau, i, U, JAU);
-                i++; 
+                placer_colonne(&plateau, col, U, JAU);
+                col++; 
                 break;
             
             case 'd':
-                placer_colonne(&plateau, i, D, JAU);
-                i++;
+                placer_colonne(&plateau, col, D, JAU);
+                col++;
                 break;
                 
             case 't':
-                placer_colonne(&plateau, i, T, JAU);
-                i++;
+                placer_colonne(&plateau, col, T, JAU);
+                col++;
                 break;
             
             case 'q':
-                placer_colonne(&plateau, i, Q, JAU);
-                i++;
+                placer_colonne(&plateau, col, Q, JAU);
+                col++;
                 break;
             
             case 'c':
-                placer_colonne(&plateau, i, C, JAU);
-                i++;
+                placer_colonne(&plateau, col, C, JAU);
+                col++;
                 break;
                 
             case 'b':
-                placer_evolution(&plateau, i-1, BONUS, JAU);
+                placer_evolution(&plateau, col-1, BONUS, JAU);
                 break;
                 
             case 'm':
-                placer_evolution(&plateau, i-1, MALUS, JAU);
+                placer_evolution(&plateau, col-1, MALUS, JAU);
                 break;
             
             // cas pour les pion Rouge
             case 'U':
-                placer_colonne(&plateau, i, U, ROU);
-                i++;
+                placer_colonne(&plateau, col, U, ROU);
+                col++;
                 break;
             
             case 'D':
-                placer_colonne(&plateau, i, D, ROU);
-                i++;
+                placer_colonne(&plateau, col, D, ROU);
+                col++;
                 break;
             
             case 'T':
-                placer_colonne(&plateau, i, T, ROU);
-                i++;
+                placer_colonne(&plateau, col, T, ROU);
+                col++;
                 break;    
             
             case 'Q':
-                placer_colonne(&plateau, i, Q, ROU);
-                i++;
+                placer_colonne(&plateau, col, Q, ROU);
+                col++;
                 break; 
             
             case 'C':
-                placer_colonne(&plateau, i, C, ROU);
-                i++;
+                placer_colonne(&plateau, col, C, ROU);
+                col++;
                 break;
             
             case 'B':
-                 placer_evolution(&plateau, i-1, BONUS, ROU);
+                 placer_evolution(&plateau, col-1, BONUS, ROU);
                  break;
             
             case 'M':
-                 placer_evolution(&plateau, i-1, MALUS, ROU);
+                 placer_evolution(&plateau, col-1, MALUS, ROU);
                  break;
+            
+            case '0' ... '9': // Une implémentation possible (pas ouf je trouve)
+                strncat(fen_nbVide, &fen[fenpos], 1);
+                printf("%s \n ", fen_nbVide);
+                
+                // Si le suivant n'est pas un chiffre
+                if(!isdigit(fen[fenpos+1])) {
+                    for(i = 0; i < atoi(fen_nbVide) && col < NBCASES; i++) {
+                        placer_colonne(&plateau, col, VIDE, VIDE);
+                        col++;
+                    }
+                    fen_nbVide[0] = '\0';
+                }
+                break;
+                
+                
             
             //TODO cas pour le trait (caractère après l'espace)  
             case ' ':
@@ -135,7 +154,7 @@ int main(int argc, char *argv[]){
         }
         fenpos++;
     }
-    for(i; i < NBCASES; i++) placer_colonne(&plateau, i, VIDE, VIDE);
+    for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
     afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 }
@@ -143,9 +162,11 @@ int main(int argc, char *argv[]){
 void placer_colonne(T_Position *p,octet col, octet nb, octet c){
     // tu lui donnes le plateau, la colonne, sa valeur, et la couleur et elle te place le pion
     // passage par adresse donc p est modifié
-    p->cols[col].nb = nb;
-    p->cols[col].couleur = c;
-    printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb); // printf pour la version debug
+    if(col < NBCASES) {
+        p->cols[col].nb = nb;
+        p->cols[col].couleur = c;
+        printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb); // printf pour la version debug
+    }
 }
 
 void placer_evolution(T_Position *p, octet col, octet type, octet c) {
@@ -187,3 +208,4 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
         }
     }
 }
+
