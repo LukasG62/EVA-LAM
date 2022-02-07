@@ -6,6 +6,13 @@
 #define DEFAULT_LOCATION "web/data/refresh-data.js"
 #define MAX_FILELOCATION 100 // Taille max du chemin spécifié par ligne de commande
 
+#ifdef __DEGUG__
+	#define DEBUGVALUE 1
+#else
+	#define DEBUGVALUE 0
+#endif
+
+#define ISDEBUG() (DEBUGVALUE ? "ON" : "OFF")
 
 int ecraserJson(T_Position p, T_Score s, char *flocation);
 
@@ -35,7 +42,7 @@ int main(int argc, char *argv[]) {
     printf("\t\t EVA-LAM PROTOTYPE 01\n");
     printf("\t\t --------------------\n");
     printf("Emplacement du fichier js : '%s' \n", file_location);
-    printf("DEBUG : OFF"); // TODO debug mode
+    printf("DEBUG : %s", ISDEBUG());
     printf("\n");
     printf("Placement des bonus/malus :\n");
     
@@ -75,9 +82,8 @@ int main(int argc, char *argv[]) {
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
-	// On affiche le score
+		// On affiche le score
         afficherScore(score);
-	//afficherPosition(plateau);
 	printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
 	printf("\tQuel est la position du pion à déplacer :");
@@ -92,12 +98,11 @@ int main(int argc, char *argv[]) {
 	coupsLegaux = getCoupsLegaux(plateau);
         printf("\tIl y a %d coups possibles\n", coupsLegaux.nb);
         printf("\n\n\n\n");
-	
 	score=evaluerScore(plateau);
 	ecraserJson(plateau, score, file_location);
 		
     }
-	
+	//TODO Affichage du vainqueur
 	return 0;
 }
 
