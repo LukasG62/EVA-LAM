@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "avalam.h"
 #include "topologie.h"
 
@@ -38,9 +39,6 @@ int main(int argc, char *argv[]) {
 	}
 	strcpy(file_location, argv[1]);
     }
-	
-    printf("\t\t EVA-LAM PROTOTYPE 01\n");
-    printf("\t\t --------------------\n");
     printf("Emplacement du fichier js : '%s' \n", file_location);
     printf("DEBUG : %s", ISDEBUG());
     printf("\n");
@@ -82,6 +80,7 @@ int main(int argc, char *argv[]) {
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
+	system("clear");
 		// On affiche le score
         afficherScore(score);
 	printf("Trait aux %ss \n",COLNAME(plateau.trait));
