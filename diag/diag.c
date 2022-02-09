@@ -7,6 +7,7 @@
 
 #define DEFAULT_NAME "diag.js"
 #define DEFAULT_NOTE ""
+#define MAXCOMM 500
 #define MAX_FEN 100
 #define MAX_FENNBVIDE 4
 
@@ -30,6 +31,8 @@ int main(int argc, char *argv[]){
     octet fenpos= 0; // compteur pour parcourir le fen
     octet col = 0; // compteur pour parcourir le plateau
     octet i;
+    char ans;
+    char *comm[MAXCOMM+1];
     
     // Initialisation des pions évolutions
 	plateau.evolution.bonusJ = UNKNOWN;
@@ -135,10 +138,9 @@ int main(int argc, char *argv[]){
                 break;
                 
                 
-            
-            //TODO cas pour le trait (caractère après l'espace)  
             case ' ':
-                if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') break; // si l'espace n'est pas celui du trait
+                if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') 
+			break; // si l'espace n'est pas celui du trait
                 
                 if (fen[fenpos+1] == 'r') // si le trait est au rouge
                     plateau.trait = ROU ;
@@ -148,7 +150,7 @@ int main(int argc, char *argv[]){
             
             //TODO Caractère inconnu ou gestion du nombre de case vide ??
             default:
-                //printf("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
+                //printf1("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
                 break;
             
         }
@@ -157,6 +159,16 @@ int main(int argc, char *argv[]){
     for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
     afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
+    do
+    {
+    	printf("Souhaitez-vous ajouter un commentaire au fichier diag ?\n(yes -> y / no -> n");
+   	scanf("%c",ans);
+    }while (ans!= "y" || ans!= "n" );
+    if ( ans ==  "y")
+	    printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
+	    while (read(0,comm,MAXCOMM))
+		    printf("%c",comm);
+	    
 }
 
 void placer_colonne(T_Position *p,octet col, octet nb, octet c){
@@ -172,6 +184,7 @@ void placer_colonne(T_Position *p,octet col, octet nb, octet c){
 void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     // tu lui donnes le plateau, la colonne, et le type (BONUS ou MALUS) et elle te place le pion évolution
     // passage par adresse donc p est modifié
+    if ( col < 0) return;
     if(type == MALUS){
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU){
