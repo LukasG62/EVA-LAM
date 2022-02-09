@@ -163,10 +163,10 @@ int main(int argc, char *argv[]){
     {
     	printf("Souhaitez-vous ajouter un commentaire au fichier diag ?\n(yes -> y / no -> n");
    	scanf("%c",ans);
-    }while (ans!= "y" || ans!= "n" );
-    if ( ans ==  "y")
+    }while (ans!= 'y' || ans!= 'n' );
+    if ( ans ==  'y')
 	    printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
-	    while (read(0,comm,MAXCOMM))
+	    while (fread(0,comm,MAXCOMM))
 		    printf("%c",comm);
 	    
 }
@@ -221,4 +221,3 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
         }
     }
 }
-
