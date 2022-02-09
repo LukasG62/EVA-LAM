@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
     octet col = 0; // compteur pour parcourir le plateau
     octet i;
     char ans;
-    char *comm[MAXCOMM+1];
+    char comm[MAXCOMM+1];
     
     // Initialisation des pions évolutions
 	plateau.evolution.bonusJ = UNKNOWN;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[]){
     }
     // parcours du fen
     while(fen[fenpos]) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
-        // TODO reflechir à comment faire les vérifications
+    
         switch(fen[fenpos]){
             // cas pour les pions jaunes
             case 'u':
@@ -123,17 +123,18 @@ int main(int argc, char *argv[]){
                  placer_evolution(&plateau, col-1, MALUS, ROU);
                  break;
             
-            case '0' ... '9': // Une implémentation possible (pas ouf je trouve)
-                strncat(fen_nbVide, &fen[fenpos], 1);
-                printf("%s \n ", fen_nbVide);
+            case '0' ... '9':
+                strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
+                printf1("Nombre en cours : %s \n ", fen_nbVide);
                 
                 // Si le suivant n'est pas un chiffre
                 if(!isdigit(fen[fenpos+1])) {
+                	// Alors on place le nombre de colonne indiqué
                     for(i = 0; i < atoi(fen_nbVide) && col < NBCASES; i++) {
                         placer_colonne(&plateau, col, VIDE, VIDE);
                         col++;
                     }
-                    fen_nbVide[0] = '\0';
+                    fen_nbVide[0] = '\0'; // reset du nombre
                 }
                 break;
                 
@@ -148,9 +149,8 @@ int main(int argc, char *argv[]){
                     plateau.trait = JAU ;
                 break;
             
-            //TODO Caractère inconnu ou gestion du nombre de case vide ??
             default:
-                //printf1("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
+                printf1("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
                 break;
             
         }
@@ -159,15 +159,15 @@ int main(int argc, char *argv[]){
     for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
     afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
-    do
-    {
-    	printf("Souhaitez-vous ajouter un commentaire au fichier diag ?\n(yes -> y / no -> n");
+
+    printf("Souhaitez-vous ajouter un commentaire au fichier diag ?\n(y/n");
    	scanf("%c",ans);
-    }while (ans!= 'y' || ans!= 'n' );
-    if ( ans ==  'y')
-	    printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
-	    while (fread(comm,MAXCOMM, stdin))
-		    printf("%c",comm);
+    if ( ans ==  'y' || ans == 'Y');
+	
+	printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
+	
+	fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
+	printf0("%s", comm); // Affichage debug de la note
 	    
 }
 
