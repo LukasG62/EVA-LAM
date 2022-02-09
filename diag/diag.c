@@ -6,10 +6,10 @@
 #include "topologie.h"
 
 #define DEFAULT_NAME "diag.js"
-#define DEFAULT_NOTE ""
 #define MAXCOMM 500
 #define MAX_FEN 100
-#define MAX_FENNBVIDE 4
+#define MAX_FENNB 4
+#define MAX_NAME 20
 
 #define U 1
 #define D 2
@@ -24,15 +24,17 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c);
 
 int main(int argc, char *argv[]){
     T_Position plateau;
+	//T_Score score; // besoin pour plus tard
     
-    char fen[MAX_FEN];
-    char fen_nbVide[MAX_FENNBVIDE] = ""; // Nombre de case vide indiqué dans le fen
+    char fen[MAX_FEN]; // code fen
+    char fen_nbVide[MAX_FENNB] = ""; // Nombre de case vide indiqué dans le fen
+	char comm[MAXCOMM+1]; // commentaire de la situation
+	char filename[MAX_NAME]; // Nom du fichier json généré 
     int diag_id; // numéro du diagramme
     octet fenpos= 0; // compteur pour parcourir le fen
     octet col = 0; // compteur pour parcourir le plateau
     octet i;
     char ans;
-    char comm[MAXCOMM+1];
     
     // Initialisation des pions évolutions
 	plateau.evolution.bonusJ = UNKNOWN;
@@ -156,18 +158,36 @@ int main(int argc, char *argv[]){
         }
         fenpos++;
     }
-    for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
-    afficherPosition(plateau); // à retirer
+    
+	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
+    
+	afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 
-    printf("Souhaitez-vous ajouter un commentaire au fichier diag ?\n(y/n");
-   	scanf("%c",ans);
-    if ( ans ==  'y' || ans == 'Y');
-	
-	printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
-	
-	fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
-	printf0("%s", comm); // Affichage debug de la note
+	printf("Nom du fichier js de la situation [%s] : ", DEFAULT_NAME);
+   	fgets(filename, MAX_NAME, stdin);
+	filename[strlen(filename)-1] = '\0';
+
+	if (!filename[0] || strlen(filename) >=MAX_NAME){
+		strcpy(filename, DEFAULT_NAME);
+	}
+	printf1("Nom fichier saisie : %s \n", filename);
+
+
+	// Saisie du commentaire de la situation
+    printf("Souhaitez-vous ajouter un commentaire au fichier diag ? (y/n) ");
+   	scanf("%c",&ans);
+    
+	if ( ans ==  'y' || ans == 'Y'){
+		
+		printf("Rentrez les commentaires, attention max %d charactères \n",MAXCOMM);
+		
+		fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
+		printf1("%s", comm); // Affichage debug de la note
+	}
+	else {
+		comm[0] = '\0';
+	}
 	    
 }
 
