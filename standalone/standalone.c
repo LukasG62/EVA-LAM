@@ -4,10 +4,10 @@
 #include "avalam.h"
 #include "topologie.h"
 
-#define DEFAULT_LOCATION "web/data/refresh-data.js"
+#define DEFAULT_LOCATION "../web/data/refresh-data.js"
 #define MAX_FILELOCATION 100 // Taille max du chemin spécifié par ligne de commande
 
-#ifdef __DEGUG__
+#ifdef __DEBUG__
 	#define DEBUGVALUE 1
 #else
 	#define DEBUGVALUE 0
@@ -39,6 +39,9 @@ int main(int argc, char *argv[]) {
 	}
 	strcpy(file_location, argv[1]);
     }
+	
+    printf("\t\t EVA-LAM PROTOTYPE 01\n");
+    printf("\t\t --------------------\n");
     printf("Emplacement du fichier js : '%s' \n", file_location);
     printf("DEBUG : %s", ISDEBUG());
     printf("\n");
@@ -80,7 +83,7 @@ int main(int argc, char *argv[]) {
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
-	system("clear");
+        system("clear");
 		// On affiche le score
         afficherScore(score);
 	printf("Trait aux %ss \n",COLNAME(plateau.trait));
@@ -99,7 +102,8 @@ int main(int argc, char *argv[]) {
         printf("\n\n\n\n");
 	score=evaluerScore(plateau);
 	ecraserJson(plateau, score, file_location);
-		
+    getchar();
+    getchar();
     }
 	//TODO Affichage du vainqueur
 	return 0;
