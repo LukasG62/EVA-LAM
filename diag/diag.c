@@ -166,7 +166,7 @@ int main(int argc, char *argv[]){
     }while (ans!= 'y' || ans!= 'n' );
     if ( ans ==  'y')
 	    printf("Rentrez les commentaires, attention max %d charactères",MAXCOMM);
-	    while (fread(0,comm,MAXCOMM))
+	    while (fread(comm,MAXCOMM, stdin))
 		    printf("%c",comm);
 	    
 }
