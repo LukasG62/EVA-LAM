@@ -105,7 +105,25 @@ int main(int argc, char *argv[]) {
     getchar();
     getchar();
     }
-	//TODO Affichage du vainqueur
+	 // Affichage des scores (à tester)
+
+    if (score.nbJ > score.nbR)
+    printf("Le joueur Jaune a gagné !");
+
+    if (score.nbR > score.nbJ)
+    printf("Le joueur Rouge a gagné !");
+
+    if (score.nbR == score.nbJ)
+    {
+        if(score.nbJ5 > score.nbR5)
+        printf("Le joueur Jaune a gagné !");
+
+        if(score.nbR5 > score.nbJ5)
+        printf("Le joueur Rouge a gagné !");
+
+        if(score.nbJ5 == score.nbR5)
+        printf("Egalité !");
+    }
 	return 0;
 }
 
