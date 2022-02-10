@@ -39,9 +39,6 @@ int main(int argc, char *argv[]) {
 	}
 	strcpy(file_location, argv[1]);
     }
-	
-    printf("\t\t EVA-LAM PROTOTYPE 01\n");
-    printf("\t\t --------------------\n");
     printf("Emplacement du fichier js : '%s' \n", file_location);
     printf("DEBUG : %s", ISDEBUG());
     printf("\n");
@@ -52,13 +49,14 @@ int main(int argc, char *argv[]) {
 	printf("\tbonusJ :");
 	scanf("%d",&pbonus);
 	plateau.evolution.bonusJ = pbonus;
-	printf("la valeur donnée est : %d\n",plateau.evolution.bonusJ);
+	printf1("la valeur donnée est : %d\n",plateau.evolution.bonusJ);
     }while(plateau.cols[pbonus].couleur != JAU);
     
     do{ // Placement bonus Rouge
 	printf("\tbonusR :");
 	scanf("%d",&pbonus);
 	plateau.evolution.bonusR = pbonus;
+	printf1("la valeur donnée est : %d\n",plateau.evolution.bonusR);
     }while(plateau.cols[pbonus].couleur != ROU );
     
     printf("la valeur donnée est : %d\n",plateau.evolution.bonusR);
@@ -67,6 +65,7 @@ int main(int argc, char *argv[]) {
 	printf("\tmalusR :");
 	scanf("%d",&pbonus);
 	plateau.evolution.malusR = pbonus;
+	printf1("la valeur donnée est : %d\n",plateau.evolution.malusR);
     }while((plateau.evolution.malusR == plateau.evolution.bonusR) || (plateau.cols[pbonus].couleur != ROU));
     printf("la valeur donnée est : %d\n",plateau.evolution.malusR);
     
@@ -74,27 +73,31 @@ int main(int argc, char *argv[]) {
     	printf("\tmalusJ :");
     	scanf("%d",&pbonus);
     	plateau.evolution.malusJ = pbonus;
+	printf1("la valeur donnée est : %d\n",plateau.evolution.malusJ);
     }while((plateau.evolution.malusJ == plateau.evolution.bonusJ ) || (plateau.cols[pbonus].couleur != JAU));
     printf("la valeur donnée est : %d\n",plateau.evolution.malusJ);
     
     score = evaluerScore(plateau); // Maintenant que les pions évolution sont placé on peut initialisé le score
+    printf0("Fin de saisie des bonus, début de partie");
 	
     //afficherPosition(plateau); // A retirer
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
-        system("clear");
+        system("clear"); // Nettoyage du shell
 		// On affiche le score
         afficherScore(score);
 	printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
 	printf("\tQuel est la position du pion à déplacer :");
 	scanf("%d",&coup.origine);
+	printf1("Le pion a déplacé est le numéro %d",&coup.origine)
 	
         printf("\tQuel est la position du pion d'arrivée :");   
         scanf("%d",&coup.destination);
+	printf1("Le pion sur lequel va etre placé le pion est %d",&coup.destination)
         
-	printf("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
+	printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
         plateau = jouerCoup(plateau,coup.origine,coup.destination);
 		
 	coupsLegaux = getCoupsLegaux(plateau);
@@ -124,6 +127,7 @@ int main(int argc, char *argv[]) {
         if(score.nbJ5 == score.nbR5)
         printf("Egalité !");
     }
+	printf0("Fin de partie !");
 	return 0;
 }
 
