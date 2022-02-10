@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "avalam.h"
 #include "topologie.h"
-// test 
+
 #define DEFAULT_NAME "diag.js"
 #define MAXCOMM 500
 #define MAX_FEN 100
@@ -21,10 +21,10 @@
 
 void placer_colonne(T_Position *p, octet col, octet nb, octet c);
 void placer_evolution(T_Position *p, octet col, octet type, octet c);
+int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation);
 
 int main(int argc, char *argv[]){
     T_Position plateau;
-	//T_Score score; // besoin pour plus tard
     
     char fen[MAX_FEN]; // code fen
     char fen_nbVide[MAX_FENNB] = ""; // Nombre de case vide indiqué dans le fen
@@ -61,83 +61,83 @@ int main(int argc, char *argv[]){
             case 'u':
                 placer_colonne(&plateau, col, U, JAU);
                 col++; 
-	        printf1("Colonne de %d placée",U);
+	        	printf1("Colonne de %d placée",U);
                 break;
             
             case 'd':
                 placer_colonne(&plateau, col, D, JAU);
                 col++;
-		printf1("Colonne de %d placée",D);
+				printf1("Colonne de %d placée",D);
                 break;
                 
             case 't':
                 placer_colonne(&plateau, col, T, JAU);
                 col++;
-		printf1("Colonne de %d placée",T);
+				printf1("Colonne de %d placée",T);
                 break;
             
             case 'q':
                 placer_colonne(&plateau, col, Q, JAU);
                 col++;
-		printf1("Colonne de %d placée",Q);
+				printf1("Colonne de %d placée",Q);
                 break;
             
             case 'c':
                 placer_colonne(&plateau, col, C, JAU);
                 col++;
-		printf1("Colonne de %d placée",C);
+				printf1("Colonne de %d placée",C);
                 break;
                 
             case 'b':
                 placer_evolution(&plateau, col-1, BONUS, JAU);
-		printf("Bonus placé");
+				printf("Bonus placé");
                 break;
                 
             case 'm':
                 placer_evolution(&plateau, col-1, MALUS, JAU);
-		printf("Malus placé");
+				printf("Malus placé");
                 break;
             
             // cas pour les pion Rouge
             case 'U':
                 placer_colonne(&plateau, col, U, ROU);
                 col++;
-		printf1("Colonne de %d placée",U);
+				printf1("Colonne de %d placée",U);
                 break;
             
             case 'D':
                 placer_colonne(&plateau, col, D, ROU);
                 col++;
-		printf1("Colonne de %d placée",D);
+				printf1("Colonne de %d placée",D);
                 break;
             
             case 'T':
                 placer_colonne(&plateau, col, T, ROU);
                 col++;
-		printf1("Colonne de %d placée",T);
+				printf1("Colonne de %d placée",T);
                 break;    
             
             case 'Q':
                 placer_colonne(&plateau, col, Q, ROU);
                 col++;
-		printf1("Colonne de %d placée",Q);
+				printf1("Colonne de %d placée",Q);
                 break; 
             
             case 'C':
                 placer_colonne(&plateau, col, C, ROU);
                 col++;
-		printf1("Colonne de %d placée",C);
+				printf1("Colonne de %d placée",C);
                 break;
             
             case 'B':
-                 placer_evolution(&plateau, col-1, BONUS, ROU);
-		 printf("Bonus placé");
-                 break;
+                placer_evolution(&plateau, col-1, BONUS, ROU);
+				printf("Bonus placé");
+                break;
             
             case 'M':
-                 placer_evolution(&plateau, col-1, MALUS, ROU);
-		 printf("Malus placé");
-                 break;
+				placer_evolution(&plateau, col-1, MALUS, ROU);
+				printf("Malus placé");
+				break;
             
             case '0' ... '9':
                 strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]){
         fenpos++;
     }
     
-	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
+	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE); // remplissage des autres colonnes s'ils en restent
 	afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 
@@ -181,7 +181,7 @@ int main(int argc, char *argv[]){
    	fgets(filename, MAX_NAME, stdin);
 	filename[strlen(filename)-1] = '\0';
 
-	if (!filename[0] || strlen(filename) >=MAX_NAME){
+	if (!filename[0] || strlen(filename) >=MAX_NAME){ // Si la saisie est vide ou trop grande alors on prends le nom par défaut
 		strcpy(filename, DEFAULT_NAME);
 	}
 	printf1("Nom fichier saisie : %s \n", filename);
@@ -201,6 +201,10 @@ int main(int argc, char *argv[]){
 	else {
 		comm[0] = '\0';
 	}
+	
+	printf("Je suis ici");
+	getchar();
+	generer_json(plateau, diag_id, fen, comm, filename);
 	    
 }
 
@@ -253,4 +257,42 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
             }
         }
     }
+}
+
+int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation) {
+	int i=0;
+	FILE *fic=NULL; // Pointeur de notre fichier
+	fic=fopen(flocation,"w"); // Ouverture du fichier en mode écriture avec écrasement
+	
+	if (fic==NULL) return 0;
+	
+	else {
+		fprintf(fic,"{\n %s:%d,\n %s:%d,\n %s:\"%s\",\n %s:%d,\n %s:%d,\n %s:%d,\n %s:%d,\n %s:[",
+																    STR_TURN,p.trait,
+																    STR_NUMDIAG,diag_id, 
+																    STR_FEN,fen,
+																    STR_BONUS_J,p.evolution.bonusJ,
+																    STR_BONUS_R,p.evolution.bonusR,
+																    STR_MALUS_R,p.evolution.malusR,
+																    STR_MALUS_J,p.evolution.malusJ,
+																    STR_COLS
+		);
+
+		fprintf(fic,"{%s:%d, %s:%d,}",STR_NB,p.cols[0].nb,STR_COULEUR,p.cols[0].couleur);
+		for (i=1;i<NBCASES;i++) 
+			fprintf(fic,",\n\t{%s:%d, %s:%d,}",STR_NB,p.cols[i].nb,STR_COULEUR,p.cols[i].couleur);
+		
+		fprintf(fic,"] \n %s:\"", STR_NOTES);
+		while(comm[i]){ // lecture caractère par caractère
+			if(comm[i] == '\n') // Si il y a un retour à la ligne
+				fprintf(fic, "<br \\>"); // on place une balise <br>
+			
+			fprintf(fic, "%c", comm[i]); // on place le caractère dans tous les cas
+			i++;
+		}
+		fprintf(fic, "\"});");
+		fclose(fic);
+		return 1;
+	}
+	
 }
