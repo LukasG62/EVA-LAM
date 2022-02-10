@@ -61,68 +61,82 @@ int main(int argc, char *argv[]){
             case 'u':
                 placer_colonne(&plateau, col, U, JAU);
                 col++; 
+	        printf1("Colonne de %d placée",U);
                 break;
             
             case 'd':
                 placer_colonne(&plateau, col, D, JAU);
                 col++;
+		printf1("Colonne de %d placée",D);
                 break;
                 
             case 't':
                 placer_colonne(&plateau, col, T, JAU);
                 col++;
+		printf1("Colonne de %d placée",T);
                 break;
             
             case 'q':
                 placer_colonne(&plateau, col, Q, JAU);
                 col++;
+		printf1("Colonne de %d placée",Q);
                 break;
             
             case 'c':
                 placer_colonne(&plateau, col, C, JAU);
                 col++;
+		printf1("Colonne de %d placée",C);
                 break;
                 
             case 'b':
                 placer_evolution(&plateau, col-1, BONUS, JAU);
+		printf("Bonus placé");
                 break;
                 
             case 'm':
                 placer_evolution(&plateau, col-1, MALUS, JAU);
+		printf("Malus placé");
                 break;
             
             // cas pour les pion Rouge
             case 'U':
                 placer_colonne(&plateau, col, U, ROU);
                 col++;
+		printf1("Colonne de %d placée",U);
                 break;
             
             case 'D':
                 placer_colonne(&plateau, col, D, ROU);
                 col++;
+		printf1("Colonne de %d placée",D);
                 break;
             
             case 'T':
                 placer_colonne(&plateau, col, T, ROU);
                 col++;
+		printf1("Colonne de %d placée",T);
                 break;    
             
             case 'Q':
                 placer_colonne(&plateau, col, Q, ROU);
                 col++;
+		printf1("Colonne de %d placée",Q);
                 break; 
             
             case 'C':
                 placer_colonne(&plateau, col, C, ROU);
                 col++;
+		printf1("Colonne de %d placée",C);
                 break;
             
             case 'B':
                  placer_evolution(&plateau, col-1, BONUS, ROU);
+		 printf("Bonus placé");
                  break;
             
             case 'M':
                  placer_evolution(&plateau, col-1, MALUS, ROU);
+		 printf("Malus placé");
                  break;
             
             case '0' ... '9':
@@ -160,7 +174,6 @@ int main(int argc, char *argv[]){
     }
     
 	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE);
-    
 	afficherPosition(plateau); // à retirer
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 
