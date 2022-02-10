@@ -201,9 +201,8 @@ int main(int argc, char *argv[]){
 	else {
 		comm[0] = '\0';
 	}
-	
-	printf("Je suis ici");
-	getchar();
+
+
 	generer_json(plateau, diag_id, fen, comm, filename);
 	    
 }
@@ -283,11 +282,14 @@ int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation
 			fprintf(fic,",\n\t{%s:%d, %s:%d,}",STR_NB,p.cols[i].nb,STR_COULEUR,p.cols[i].couleur);
 		
 		fprintf(fic,"] \n %s:\"", STR_NOTES);
+		i = 0;
 		while(comm[i]){ // lecture caractère par caractère
-			if(comm[i] == '\n') // Si il y a un retour à la ligne
+			if(comm[i] == '\n') { // Si il y a un retour à la ligne
 				fprintf(fic, "<br \\>"); // on place une balise <br>
+				printf1("Ajout du chr : %c \n", comm[i]);
+			}
+			else fprintf(fic, "%c", comm[i]); // on place le caractère dans tous les cas
 			
-			fprintf(fic, "%c", comm[i]); // on place le caractère dans tous les cas
 			i++;
 		}
 		fprintf(fic, "\"});");
