@@ -266,7 +266,7 @@ int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation
 	if (fic==NULL) return 0;
 	
 	else {
-		fprintf(fic,"{\n %s:%d,\n %s:%d,\n %s:\"%s\",\n %s:%d,\n %s:%d,\n %s:%d,\n %s:%d,\n %s:[",
+		fprintf(fic,"traiterJson({\n %s:%d,\n %s:%d,\n %s:\"%s\",\n %s:%d,\n %s:%d,\n %s:%d,\n %s:%d,\n %s:[",
 																    STR_TURN,p.trait,
 																    STR_NUMDIAG,diag_id, 
 																    STR_FEN,fen,
@@ -279,13 +279,13 @@ int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation
 
 		fprintf(fic,"{%s:%d, %s:%d,}",STR_NB,p.cols[0].nb,STR_COULEUR,p.cols[0].couleur);
 		for (i=1;i<NBCASES;i++) 
-			fprintf(fic,",\n\t{%s:%d, %s:%d,}",STR_NB,p.cols[i].nb,STR_COULEUR,p.cols[i].couleur);
+			fprintf(fic,",\n\t{%s:%d, %s:%d}",STR_NB,p.cols[i].nb,STR_COULEUR,p.cols[i].couleur);
 		
-		fprintf(fic,"] \n %s:\"", STR_NOTES);
+		fprintf(fic,"], \n %s:\"", STR_NOTES);
 		i = 0;
 		while(comm[i]){ // lecture caractère par caractère
 			if(comm[i] == '\n') { // Si il y a un retour à la ligne
-				fprintf(fic, "<br \\>"); // on place une balise <br>
+				fprintf(fic, "<br />"); // on place une balise <br>
 				printf1("Ajout du chr : %c \n", comm[i]);
 			}
 			else fprintf(fic, "%c", comm[i]); // on place le caractère dans tous les cas
