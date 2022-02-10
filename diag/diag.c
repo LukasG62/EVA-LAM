@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "avalam.h"
 #include "topologie.h"
-
+// test 
 #define DEFAULT_NAME "diag.js"
 #define MAXCOMM 500
 #define MAX_FEN 100
