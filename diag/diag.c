@@ -34,7 +34,6 @@ int main(int argc, char *argv[]){
     octet fenpos= 0; // compteur pour parcourir le fen
     octet col = 0; // compteur pour parcourir le plateau
     octet i;
-    char ans;
     
     // Initialisation des pions évolutions
 	plateau.evolution.bonusJ = UNKNOWN;
@@ -186,22 +185,12 @@ int main(int argc, char *argv[]){
 	}
 	printf1("Nom fichier saisie : %s \n", filename);
 
-
 	// Saisie du commentaire de la situation
-    printf("Souhaitez-vous ajouter un commentaire au fichier diag ? (y/n) ");
-   	scanf("%c",&ans);
-    
-	if ( ans ==  'y' || ans == 'Y'){
+	printf("Rentrez les commentaires, attention max %d charactères : \n",MAXCOMM);
 		
-		printf("Rentrez les commentaires, attention max %d charactères \n",MAXCOMM);
-		
-		fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
-		printf1("%s", comm); // Affichage debug de la note
-	}
-	else {
-		comm[0] = '\0';
-	}
-
+	fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
+	printf1("%s", comm); // Affichage debug de la note
+	
 
 	generer_json(plateau, diag_id, fen, comm, filename);
 	    
