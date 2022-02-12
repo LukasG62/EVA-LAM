@@ -1,21 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
 #include "avalam.h"
 #include "topologie.h"
-
-#define DEFAULT_LOCATION "../web/data/refresh-data.js"
-#define MAX_FILELOCATION 100 // Taille max du chemin spécifié par ligne de commande
-
-#ifdef __DEBUG__
-	#define DEBUGVALUE 1
-#else
-	#define DEBUGVALUE 0
-#endif
-
-#define ISDEBUG() (DEBUGVALUE ? "ON" : "OFF")
-
-int ecraserJson(T_Position p, T_Score s, char *flocation);
+#include "standalone.h"
 
 int main(int argc, char *argv[]) {
     // Declaration et initialisation des variables du jeu
@@ -23,7 +12,6 @@ int main(int argc, char *argv[]) {
     T_Score score;
     T_ListeCoups coupsLegaux = getCoupsLegaux(plateau);
     T_Coup coup;
-    octet pbonus; // position des bonus saisie par l'utilisateur
 
     // Variable contenant le chemin du fichier json
     char file_location[MAX_FILELOCATION] = DEFAULT_LOCATION;
@@ -44,77 +32,45 @@ int main(int argc, char *argv[]) {
     printf("\n");
     printf("Placement des bonus/malus :\n");
     
-    // Placement des bonus/malus avec vérification des saisies
-    do{ // Placement bonus Jaune
-	printf("\tbonusJ :");
-	scanf("%d",&pbonus);
-	plateau.evolution.bonusJ = pbonus;
-	printf1("la valeur donnée est : %d\n",plateau.evolution.bonusJ);
-    }while(plateau.cols[pbonus].couleur != JAU);
-    
-    do{ // Placement bonus Rouge
-	printf("\tbonusR :");
-	scanf("%d",&pbonus);
-	plateau.evolution.bonusR = pbonus;
-	printf1("la valeur donnée est : %d\n",plateau.evolution.bonusR);
-    }while(plateau.cols[pbonus].couleur != ROU );
-    
-    printf("la valeur donnée est : %d\n",plateau.evolution.bonusR);
-
-    do{ // Placement malus Rouge
-	printf("\tmalusR :");
-	scanf("%d",&pbonus);
-	plateau.evolution.malusR = pbonus;
-	printf1("la valeur donnée est : %d\n",plateau.evolution.malusR);
-    }while((plateau.evolution.malusR == plateau.evolution.bonusR) || (plateau.cols[pbonus].couleur != ROU));
-    printf("la valeur donnée est : %d\n",plateau.evolution.malusR);
-    
-    do{ // Placement malus Jaune
-    	printf("\tmalusJ :");
-    	scanf("%d",&pbonus);
-    	plateau.evolution.malusJ = pbonus;
-	printf1("la valeur donnée est : %d\n",plateau.evolution.malusJ);
-    }while((plateau.evolution.malusJ == plateau.evolution.bonusJ ) || (plateau.cols[pbonus].couleur != JAU));
-    printf("la valeur donnée est : %d\n",plateau.evolution.malusJ);
-    
+    saisirEvolution(&plateau);
+    getchar();
     score = evaluerScore(plateau); // Maintenant que les pions évolution sont placé on peut initialisé le score
     printf0("Fin de saisie des bonus, début de partie");
 	
-    //afficherPosition(plateau); // A retirer
+    afficherPosition(plateau); // A retirer
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
-        system("clear"); // Nettoyage du shell
-		// On affiche le score
+        //system("clear"); // Nettoyage du shell
+
         afficherScore(score);
-	printf("Trait aux %ss \n",COLNAME(plateau.trait));
+		printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
-	printf("\tQuel est la position du pion à déplacer :");
-	scanf("%d",&coup.origine);
-	printf1("Le pion a déplacé est le numéro %d",&coup.origine);
+		printf("\tQuel est la position du pion à déplacer :");
+		scanf("%d",&coup.origine);
+		printf1("Le pion a déplacé est le numéro %d",&coup.origine);
 	
         printf("\tQuel est la position du pion d'arrivée :");   
         scanf("%d",&coup.destination);
-	printf1("Le pion sur lequel va etre placé le pion est %d",&coup.destination);
+		printf1("Le pion sur lequel va etre placé le pion est %d",&coup.destination);
         
-	printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
+		printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
         plateau = jouerCoup(plateau,coup.origine,coup.destination);
 		
-	coupsLegaux = getCoupsLegaux(plateau);
+		coupsLegaux = getCoupsLegaux(plateau);
         printf("\tIl y a %d coups possibles\n", coupsLegaux.nb);
         printf("\n\n\n\n");
-	score=evaluerScore(plateau);
-	ecraserJson(plateau, score, file_location);
-    getchar();
-    getchar();
+		
+		score=evaluerScore(plateau);
+		ecraserJson(plateau, score, file_location);
     }
 	 // Affichage des scores (à tester)
 
     if (score.nbJ > score.nbR)
-    printf("Le joueur Jaune a gagné !");
+    	printf("Le joueur Jaune a gagné !");
 
     if (score.nbR > score.nbJ)
-    printf("Le joueur Rouge a gagné !");
+    	printf("Le joueur Rouge a gagné !");
 
     if (score.nbR == score.nbJ)
     {
@@ -160,4 +116,44 @@ int ecraserJson(T_Position p, T_Score s, char *flocation){ //update du fichier J
 		return 1;
 	}
 	
+}
+
+void saisirEvolution(T_Position *p) {
+	int pbonus; // position des bonus saisie par l'utilisateur
+	// Placement des bonus/malus avec vérification des saisies
+    do{ // Placement bonus Jaune
+		printf("\tbonusJ :");
+		scanf("%d",&pbonus);
+		p->evolution.bonusJ = pbonus;
+		printf1("la valeur donnée est : %d\n",p->evolution.bonusJ);
+    }while(p->cols[pbonus].couleur != JAU);
+    
+    printf("la valeur donnée est : %d\n",p->evolution.bonusJ);
+    
+    do{ // Placement bonus Rouge
+		printf("\tbonusR :");
+		scanf("%d",&pbonus);
+		p->evolution.bonusR = pbonus;
+		printf1("la valeur donnée est : %d\n",p->evolution.bonusR);
+    }while(p->cols[pbonus].couleur != ROU );
+    
+    printf("la valeur donnée est : %d\n",p->evolution.bonusR);
+
+    do{ // Placement malus Rouge
+		printf("\tmalusR :");
+		scanf("%d",&pbonus);
+		p->evolution.malusR = pbonus;
+		printf1("la valeur donnée est : %d\n",p->evolution.malusR);
+    }while((p->evolution.malusR == p->evolution.bonusR) || (p->cols[pbonus].couleur != ROU));
+    printf("la valeur donnée est : %d\n",p->evolution.malusR);
+    
+    do{ // Placement malus Jaune
+    	printf("\tmalusJ :");
+    	scanf("%d",&pbonus);
+    	p->evolution.malusJ = pbonus;
+		printf1("la valeur donnée est : %d\n",p->evolution.malusJ);
+    }while((p->evolution.malusJ == p->evolution.bonusJ ) || (p->cols[pbonus].couleur != JAU));
+    printf("la valeur donnée est : %d\n",p->evolution.malusJ);
+    
+    return;
 }
