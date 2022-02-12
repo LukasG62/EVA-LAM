@@ -14,10 +14,10 @@ install: diag.static diag.exe
 LIB=-L../build/lib
 INC=-I../include
 
-diag.exe:diag.c 
+diag.exe:diag.c diag.h
 	gcc $(DEBUG) $(LIB) $(INC) diag.c -o diag.exe -lavalam
 
-diag.static:diag.c 
+diag.static:diag.c diag.h
 	gcc -static $(DEBUG) $(INC) $(LIB)  diag.c -o diag.static  -lavalam
 
 clean: 
