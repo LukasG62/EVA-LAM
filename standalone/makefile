@@ -14,10 +14,10 @@ install: standalone.static standalone.exe
 LIB=-L../build/lib
 INC=-I../include
 
-standalone.exe:standalone.c 
+standalone.exe:standalone.c standalone.h
 	gcc $(DEBUG) $(LIB) $(INC) standalone.c -o standalone.exe -lavalam
 
-standalone.static:standalone.c 
+standalone.static:standalone.c standalone.h
 	gcc -static $(DEBUG) $(INC) $(LIB)  standalone.c -o standalone.static  -lavalam
 
 clean: 
