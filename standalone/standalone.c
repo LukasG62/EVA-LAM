@@ -32,27 +32,25 @@ int main(int argc, char *argv[]) {
     printf("\n");
     printf("Placement des bonus/malus :\n");
     
-    saisirEvolution(&plateau);
-    getchar();
-    score = evaluerScore(plateau); // Maintenant que les pions évolution sont placé on peut initialisé le score
+    saisirEvolution(&plateau); // Demande de saisie des pions evolutions
+    score = evaluerScore(plateau); // Initialisation du score
     printf0("Fin de saisie des bonus, début de partie");
 	
-    afficherPosition(plateau); // A retirer
+    //afficherPosition(plateau); // A retirer
     ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
     
     while(coupsLegaux.nb){
-        //system("clear"); // Nettoyage du shell
-
+        system("clear"); // Nettoyage du shell
         afficherScore(score);
 		printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
 		printf("\tQuel est la position du pion à déplacer :");
-		scanf("%d",&coup.origine);
-		printf1("Le pion a déplacé est le numéro %d",&coup.origine);
+		scanf("%d",&(coup.origine));
+		printf1("Le pion a déplacé est le numéro %d",coup.origine);
 	
         printf("\tQuel est la position du pion d'arrivée :");   
         scanf("%d",&coup.destination);
-		printf1("Le pion sur lequel va etre placé le pion est %d",&coup.destination);
+		printf1("Le pion sur lequel va etre placé le pion est %d",coup.destination);
         
 		printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
         plateau = jouerCoup(plateau,coup.origine,coup.destination);
@@ -63,6 +61,8 @@ int main(int argc, char *argv[]) {
 		
 		score=evaluerScore(plateau);
 		ecraserJson(plateau, score, file_location);
+		
+		getchar();getchar();
     }
 	 // Affichage des scores (à tester)
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
-int ecraserJson(T_Position p, T_Score s, char *flocation){ //update du fichier Jason en fonction de l'avancement de la partie
+int ecraserJson(T_Position p, T_Score s, char *flocation){
 	octet i;
 	FILE *fic=NULL; // Pointeur de notre fichier
 	fic=fopen(flocation,"w"); // Ouverture du fichier en mode écriture avec écrasement
