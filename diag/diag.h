@@ -17,6 +17,8 @@
 #define C 5
 #define BONUS 0
 #define MALUS 1
+#define EVOLNAME(type) (type ? "malus" : "bonus")
+
 
 void placer_colonne(T_Position *p, octet col, octet nb, octet c);
 void placer_evolution(T_Position *p, octet col, octet type, octet c);
