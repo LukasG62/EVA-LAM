@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
         strcpy(fen, argv[2]);
     }
     // parcours du fen
-    while(fen[fenpos]) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
+    while(fen[fenpos] && (fen[fenpos] != 'r' && fen[fenpos] != 'j')) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
     
         switch(fen[fenpos]){
             // cas pour les pions jaunes
@@ -139,8 +139,10 @@ int main(int argc, char *argv[]){
                 
                 
             case ' ':
-                if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') 
-			break; // si l'espace n'est pas celui du trait
+                if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') {
+                	fprintf(stderr, "[ERREUR] Espace en trop ! \n");
+                	break; // si l'espace n'est pas celui du trait
+                }
                 
                 if (fen[fenpos+1] == 'r') // si le trait est au rouge
                     plateau.trait = ROU ;
@@ -149,7 +151,7 @@ int main(int argc, char *argv[]){
                 break;
             
             default:
-                printf1("Charactère %d non pris en charge, suite de l'analyse du FEN \n",fenpos); // message d'erreur (possibilité de le mettre que dans le mode DEBUG)
+                fprintf(stderr,"[ERREUR] Charactère [%d]:%c non pris en charge, suite de l'analyse du FEN \n",fenpos, fen[fenpos]);
                 break;
             
         }
@@ -157,7 +159,8 @@ int main(int argc, char *argv[]){
     }
     
 	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE); // remplissage des autres colonnes s'ils en restent
-	afficherPosition(plateau); // à retirer
+	
+	afficherPositionDebug(plateau);
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
 
 	printf("Nom du fichier js de la situation [%s] : ", DEFAULT_NAME);
@@ -176,7 +179,7 @@ int main(int argc, char *argv[]){
 	printf1("%s", comm); // Affichage debug de la note
 	
 
-	generer_json(plateau, diag_id, fen, comm, filename);
+	if(!generer_json(plateau, diag_id, fen, comm, filename)) fprintf(stderr, "[ERREUR] Impossible d'ouvrir le fichier !");
 	    
 }
 
@@ -188,6 +191,7 @@ void placer_colonne(T_Position *p,octet col, octet nb, octet c){
         p->cols[col].couleur = c;
         printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb); // printf pour la version debug
     }
+    else fprintf(stderr, "[ERREUR] Dépassement du nombre de colonne !");
 }
 
 void placer_evolution(T_Position *p, octet col, octet type, octet c) {
