@@ -4,6 +4,12 @@
 #define MAX_FENNB 4
 #define MAX_NAME 20
 
+#ifdef __DEBUG__
+	#define afficherPositionDebug(p) afficherPosition(p)
+#else
+	#define afficherPositionDebug(p)
+#endif
+
 #define U 1
 #define D 2
 #define T 3
