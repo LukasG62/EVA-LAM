@@ -44,92 +44,78 @@ int main(int argc, char *argv[]){
             case 'u':
                 placer_colonne(&plateau, col, U, JAU);
                 col++; 
-	        	printf1("Colonne de %d placée",U);
                 break;
             
             case 'd':
                 placer_colonne(&plateau, col, D, JAU);
                 col++;
-				printf1("Colonne de %d placée",D);
                 break;
                 
             case 't':
                 placer_colonne(&plateau, col, T, JAU);
                 col++;
-				printf1("Colonne de %d placée",T);
                 break;
             
             case 'q':
                 placer_colonne(&plateau, col, Q, JAU);
                 col++;
-				printf1("Colonne de %d placée",Q);
                 break;
             
             case 'c':
                 placer_colonne(&plateau, col, C, JAU);
                 col++;
-				printf1("Colonne de %d placée",C);
                 break;
                 
             case 'b':
                 placer_evolution(&plateau, col-1, BONUS, JAU);
-				printf("Bonus placé");
                 break;
                 
             case 'm':
                 placer_evolution(&plateau, col-1, MALUS, JAU);
-				printf("Malus placé");
                 break;
             
             // cas pour les pion Rouge
             case 'U':
                 placer_colonne(&plateau, col, U, ROU);
                 col++;
-				printf1("Colonne de %d placée",U);
                 break;
             
             case 'D':
                 placer_colonne(&plateau, col, D, ROU);
                 col++;
-				printf1("Colonne de %d placée",D);
                 break;
             
             case 'T':
                 placer_colonne(&plateau, col, T, ROU);
                 col++;
-				printf1("Colonne de %d placée",T);
                 break;    
             
             case 'Q':
                 placer_colonne(&plateau, col, Q, ROU);
                 col++;
-				printf1("Colonne de %d placée",Q);
                 break; 
             
             case 'C':
                 placer_colonne(&plateau, col, C, ROU);
                 col++;
-				printf1("Colonne de %d placée",C);
                 break;
             
             case 'B':
                 placer_evolution(&plateau, col-1, BONUS, ROU);
-				printf("Bonus placé");
                 break;
             
             case 'M':
 				placer_evolution(&plateau, col-1, MALUS, ROU);
-				printf("Malus placé");
 				break;
             
             case '0' ... '9':
                 strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
-                printf1("Nombre en cours : %s \n ", fen_nbVide);
+                printf1("Nombre en cours : %s \n", fen_nbVide);
                 
                 // Si le suivant n'est pas un chiffre
                 if(!isdigit(fen[fenpos+1])) {
                 	// Alors on place le nombre de colonne indiqué
-                    for(i = 0; i < atoi(fen_nbVide) && col < NBCASES; i++) {
+                    for(i = 0; i < atoi(fen_nbVide); i++) {
                         placer_colonne(&plateau, col, VIDE, VIDE);
                         col++;
                     }
@@ -191,27 +177,24 @@ void placer_colonne(T_Position *p,octet col, octet nb, octet c){
         p->cols[col].couleur = c;
         printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb); // printf pour la version debug
     }
-    else fprintf(stderr, "[ERREUR] Dépassement du nombre de colonne !");
+    else fprintf(stderr, "[ERREUR] Dépassement du nombre de colonne ! \n");
 }
 
 void placer_evolution(T_Position *p, octet col, octet type, octet c) {
-    // tu lui donnes le plateau, la colonne, et le type (BONUS ou MALUS) et elle te place le pion évolution
-    // passage par adresse donc p est modifié
-    if ( col < 0) return;
+    if ( col < 0) return; 
+    
     if(type == MALUS){
         //On place notre pion evolution dans le plateau selon sa couleur
         if(c == JAU){
             if(p->evolution.malusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
             
             p->evolution.malusJ = col;
-            printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         }
         else {
             if(c == ROU) {
                 if(p->evolution.malusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
                 
                 p->evolution.malusR = col;
-                printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
             }
         }
     }
@@ -222,17 +205,16 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
             if(p->evolution.bonusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
             
             p->evolution.bonusJ = col;
-            printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
         }
         else {
             if(c == ROU) {
                 if(p->evolution.bonusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
                 
                 p->evolution.bonusR = col;
-                printf3("Placement d'un %s %s à la colonne n° %s\n", type, COLNAME(c), col); // printf pour la version debug
             }
         }
     }
+    printf3("Placement d'un %s %s à la colonne n°%d\n", EVOLNAME(type), COLNAME(c), col); 
 }
 
 int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation) {
