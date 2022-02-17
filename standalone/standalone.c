@@ -45,11 +45,11 @@ int main(int argc, char *argv[]) {
 		printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
 		printf("\tQuel est la position du pion à déplacer :");
-		scanf("%d",&(coup.origine));
+		scanf("%hhd",&coup.origine);
 		printf1("Le pion a déplacé est le numéro %d",coup.origine);
 	
         printf("\tQuel est la position du pion d'arrivée :");   
-        scanf("%d",&coup.destination);
+        scanf("%hhd",&coup.destination);
 		printf1("Le pion sur lequel va etre placé le pion est %d",coup.destination);
         
 		printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
