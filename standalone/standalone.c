@@ -67,23 +67,23 @@ int main(int argc, char *argv[]) {
 	 // Affichage des scores (à tester)
 
     if (score.nbJ > score.nbR)
-    	printf("Le joueur Jaune a gagné !");
+    	printf("Le joueur Jaune a gagné !\n");
 
     if (score.nbR > score.nbJ)
-    	printf("Le joueur Rouge a gagné !");
+    	printf("Le joueur Rouge a gagné !\n");
 
     if (score.nbR == score.nbJ)
     {
         if(score.nbJ5 > score.nbR5)
-        printf("Le joueur Jaune a gagné !");
+        printf("Le joueur Jaune a gagné !\n");
 
         if(score.nbR5 > score.nbJ5)
-        printf("Le joueur Rouge a gagné !");
+        printf("Le joueur Rouge a gagné !\n");
 
         if(score.nbJ5 == score.nbR5)
-        printf("Egalité !");
+        printf("Egalité !\n");
     }
-	printf0("Fin de partie !");
+	printf0("Fin de partie !\n");
 	return 0;
 }
 
