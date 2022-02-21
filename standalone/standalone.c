@@ -34,10 +34,9 @@ int main(int argc, char *argv[]) {
     
     saisirEvolution(&plateau); // Demande de saisie des pions evolutions
     score = evaluerScore(plateau); // Initialisation du score
-    printf0("Fin de saisie des bonus, début de partie");
+    printf0("Fin de saisie des bonus, début de partie\n");
 	
-    //afficherPosition(plateau); // A retirer
-    ecraserJson(plateau, score, file_location); // Mise à jour du fichier json
+    ecraserJson(plateau, score, file_location); // MAJ du fichier json
     
     while(coupsLegaux.nb){
         system("clear"); // Nettoyage du shell
@@ -46,11 +45,11 @@ int main(int argc, char *argv[]) {
 	
 		printf("\tQuel est la position du pion à déplacer :");
 		scanf("%hhd",&coup.origine);
-		printf1("Le pion a déplacé est le numéro %d",coup.origine);
+		printf1("Le pion a déplacé est le numéro %d\n",coup.origine);
 	
         printf("\tQuel est la position du pion d'arrivée :");   
         scanf("%hhd",&coup.destination);
-		printf1("Le pion sur lequel va etre placé le pion est %d",coup.destination);
+		printf1("Le pion sur lequel va etre placé le pion est %d\n",coup.destination);
         
 		printf2("\tLe coup à jouer est : %d -> %d\n",coup.origine,coup.destination);
         plateau = jouerCoup(plateau,coup.origine,coup.destination);
@@ -64,7 +63,7 @@ int main(int argc, char *argv[]) {
 		
 		getchar();getchar();
     }
-	 // Affichage des scores (à tester)
+	 // Affichage des scores
 
     if (score.nbJ > score.nbR)
     	printf("Le joueur Jaune a gagné !\n");
@@ -119,8 +118,9 @@ int ecraserJson(T_Position p, T_Score s, char *flocation){
 }
 
 void saisirEvolution(T_Position *p) {
-	int pbonus; // position des bonus saisie par l'utilisateur
+	int pbonus; // Position des bonus
 	// Placement des bonus/malus avec vérification des saisies
+	
     do{ // Placement bonus Jaune
 		printf("\tbonusJ :");
 		scanf("%d",&pbonus);
