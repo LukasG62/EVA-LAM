@@ -12,9 +12,9 @@ int main(int argc, char *argv[]){
     plateau.trait = 0;
     
     char fen[MAX_FEN]; // code fen
-    char fen_nbVide[MAX_FENNB] = ""; // Nombre de case vide indiqué dans le fen
+    char fen_nbVide[MAX_FENNB] = ""; // nombre de case vide dans fen (chaine)
 	char comm[MAXCOMM+1]; // commentaire de la situation
-	char filename[MAX_NAME]; // Nom du fichier json généré 
+	char filename[MAX_NAME]; // nom du fichier json généré 
     int diag_id; // numéro du diagramme
     
     octet fenpos= 0; // compteur pour parcourir le fen
@@ -31,11 +31,11 @@ int main(int argc, char *argv[]){
     }
     // récupération des arguments
     else {
-        diag_id = atoi(argv[1]);
+        diag_id = atoi(argv[1]); //conversion de la chaine en entier
         strcpy(fen, argv[2]);
     }
-    // parcours du fen
-    while(fen[fenpos] && (fen[fenpos] != 'r' && fen[fenpos] != 'j')) { //on continue tant que l'on a pas croiser la section dédiée au trait (gestion après la boucle while)
+    // parcours du fen jusqu'au trait ou fin de chaine
+    while(fen[fenpos] && (fen[fenpos] != 'r' && fen[fenpos] != 'j')) {
     
         switch(fen[fenpos]){
             // cas pour les pions jaunes
@@ -108,18 +108,18 @@ int main(int argc, char *argv[]){
             
             case '0' ... '9':
                 if(strlen(fen_nbVide) < MAX_FENNB-1)
-					strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
+					strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaques chiffres trouvés
 					
                 printf1("Nombre en cours : %s \n", fen_nbVide);
                 
-                // Si le suivant n'est pas un chiffre
+				//Fin lecture nombre
                 if(!isdigit(fen[fenpos+1])) {
-                	// Alors on place le nombre de colonne indiqué
+                	// placement des colonnes vides
                     for(i = 0; i < atoi(fen_nbVide); i++) {
                         placer_colonne(&plateau, col, VIDE, VIDE);
                         col++;
                     }
-                    fen_nbVide[0] = '\0'; // reset du nombre
+                    fen_nbVide[0] = '\0';
                 }
                 break;
                 
@@ -127,12 +127,12 @@ int main(int argc, char *argv[]){
             case ' ':
                 if (fen[fenpos+1] != 'j'  && fen[fenpos+1]!= 'r') {
                 	fprintf(stderr, "[ERREUR] Espace en trop ! \n");
-                	break; // si l'espace n'est pas celui du trait
+                	break;
                 }
                 
-                if (fen[fenpos+1] == 'r') // si le trait est au rouge
+                if (fen[fenpos+1] == 'r')
                     plateau.trait = ROU ;
-                else // il est forcément jaune (cas d'erreur mettra le trait a jaune car pas de vérif avec j)
+                else
                     plateau.trait = JAU ;
                 break;
             
@@ -143,8 +143,8 @@ int main(int argc, char *argv[]){
         }
         fenpos++;
     }
-    
-	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE); // remplissage des autres colonnes s'ils en restent
+    //Remplissages des colonnes restantes
+	for(col; col < NBCASES; col++) placer_colonne(&plateau, col, VIDE, VIDE); 
 	
 	afficherPositionDebug(plateau);
     printf1("Trait aux : %s \n", COLNAME(plateau.trait));
@@ -153,7 +153,7 @@ int main(int argc, char *argv[]){
    	fgets(filename, MAX_NAME, stdin);
 	filename[strlen(filename)-1] = '\0';
 
-	if (!filename[0] || strlen(filename) >=MAX_NAME){ // Si la saisie est vide ou trop grande alors on prends le nom par défaut
+	if (!filename[0] || strlen(filename) >=MAX_NAME){
 		strcpy(filename, DEFAULT_NAME);
 	}
 	printf1("Nom fichier saisie : %s \n", filename);
@@ -170,12 +170,10 @@ int main(int argc, char *argv[]){
 }
 
 void placer_colonne(T_Position *p,octet col, octet nb, octet c){
-    // tu lui donnes le plateau, la colonne, sa valeur, et la couleur et elle te place le pion
-    // passage par adresse donc p est modifié
     if(col < NBCASES) {
         p->cols[col].nb = nb;
         p->cols[col].couleur = c;
-        printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb); // printf pour la version debug
+        printf3("Placement [%d | [%s : %d]\n", col, COLNAME(c), nb);
     }
     else fprintf(stderr, "[ERREUR] Dépassement du nombre de colonne ! \n");
 }
@@ -184,15 +182,14 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     if ( col < 0) return; 
     
     if(type == MALUS){
-        //On place notre pion evolution dans le plateau selon sa couleur
+		
         if(c == JAU){
-            if(p->evolution.malusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
-            
+            if(p->evolution.malusJ != UNKNOWN) return;
             p->evolution.malusJ = col;
         }
         else {
             if(c == ROU) {
-                if(p->evolution.malusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+                if(p->evolution.malusR != UNKNOWN) return;
                 
                 p->evolution.malusR = col;
             }
@@ -200,15 +197,14 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
     }
     // Sinon c'est un bonus
     else {
-        //On place notre pion evolution dans le plateau selon sa couleur
+		
         if(c == JAU) {
-            if(p->evolution.bonusJ != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
-            
+            if(p->evolution.bonusJ != UNKNOWN) return; 
             p->evolution.bonusJ = col;
         }
         else {
             if(c == ROU) {
-                if(p->evolution.bonusR != UNKNOWN) return; // on fait rien si la valeur à déjà été changé
+                if(p->evolution.bonusR != UNKNOWN) return;
                 
                 p->evolution.bonusR = col;
             }
@@ -220,7 +216,7 @@ void placer_evolution(T_Position *p, octet col, octet type, octet c) {
 int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation) {
 	int i=0;
 	FILE *fic=NULL; // Pointeur de notre fichier
-	fic=fopen(flocation,"w"); // Ouverture du fichier en mode écriture avec écrasement
+	fic=fopen(flocation,"w");
 	
 	if (fic==NULL) return 0;
 	
@@ -242,12 +238,12 @@ int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation
 		
 		fprintf(fic,"], \n %s:\"", STR_NOTES);
 		i = 0;
-		while(comm[i]){ // lecture caractère par caractère
-			if(comm[i] == '\n') { // Si il y a un retour à la ligne
-				fprintf(fic, "<br />"); // on place une balise <br>
+		while(comm[i]){ // lecture du commentaire
+			if(comm[i] == '\n') { // transformation \n en balise
+				fprintf(fic, "<br />");
 				printf1("Ajout du chr : %c \n", comm[i]);
 			}
-			else fprintf(fic, "%c", comm[i]); // on place le caractère dans tous les cas
+			else fprintf(fic, "%c", comm[i]);
 			
 			i++;
 		}
