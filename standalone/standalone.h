@@ -11,3 +11,7 @@
 
 int ecraserJson(T_Position p, T_Score s, char *flocation);
 void saisirEvolution(T_Position *p);
+
+void initScore(T_Score *ptrS);
+
+void initEvolution(T_Evolution *ptrE);

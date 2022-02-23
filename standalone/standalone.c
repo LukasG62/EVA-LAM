@@ -10,6 +10,8 @@ int main(int argc, char *argv[]) {
     // Declaration et initialisation des variables du jeu
     T_Position plateau = getPositionInitiale();
     T_Score score;
+    initScore(&score);
+    initEvolution(&(plateau.evolution));
     T_ListeCoups coupsLegaux = getCoupsLegaux(plateau);
     T_Coup coup;
 
@@ -27,6 +29,9 @@ int main(int argc, char *argv[]) {
 	}
 	strcpy(file_location, argv[1]);
     }
+    
+    ecraserJson(plateau, score, file_location);
+    
     printf("Emplacement du fichier js : '%s' \n", file_location);
     printf("DEBUG : %s", ISDEBUG());
     printf("\n");
@@ -120,7 +125,7 @@ int ecraserJson(T_Position p, T_Score s, char *flocation){
 void saisirEvolution(T_Position *p) {
 	int pbonus; // Position des bonus
 	// Placement des bonus/malus avec vérification des saisies
-	
+
     do{ // Placement bonus Jaune
 		printf("\tbonusJ :");
 		scanf("%d",&pbonus);
@@ -157,3 +162,18 @@ void saisirEvolution(T_Position *p) {
     
     return;
 }
+
+void initScore(T_Score *ptrS){
+	ptrS->nbJ = 24;
+	ptrS->nbR = 24;
+	ptrS->nbJ5 = 0;
+	ptrS->nbR5 = 0;
+}
+
+void initEvolution(T_Evolution *ptrE){
+	ptrE->bonusJ = UNKNOWN;
+	ptrE->malusJ = UNKNOWN; 
+	ptrE->bonusR = UNKNOWN;
+	ptrE->malusR = UNKNOWN; 
+}
+
