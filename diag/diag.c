@@ -20,11 +20,7 @@ int main(int argc, char *argv[]){
     octet i;
     
     // Initialisation des pions évolutions
-	plateau.evolution.bonusJ = UNKNOWN;
-	plateau.evolution.bonusR = UNKNOWN;
-	plateau.evolution.malusJ = UNKNOWN;
-	plateau.evolution.malusR = UNKNOWN;
-
+	initEvolution(&(plateau.evolution));
     
     // vérification du nombre d'arguments
     if(argc != 3) {
@@ -256,4 +252,12 @@ int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation
 		return 1;
 	}
 	
+}
+
+void initEvolution(T_Evolution *ptrE){
+	ptrE->bonusJ = UNKNOWN;
+	ptrE->bonusR = UNKNOWN;
+	ptrE->malusJ = UNKNOWN;
+	ptrE->malusR = UNKNOWN;
+
 }

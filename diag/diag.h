@@ -23,3 +23,5 @@
 void placer_colonne(T_Position *p, octet col, octet nb, octet c);
 void placer_evolution(T_Position *p, octet col, octet type, octet c);
 int generer_json(T_Position p, int diag_id,char *fen,char *comm, char *flocation);
+
+void initEvolution(T_Evolution *ptrE);
