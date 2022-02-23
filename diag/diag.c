@@ -15,11 +15,12 @@ int main(int argc, char *argv[]){
 	char comm[MAXCOMM+1]; // commentaire de la situation
 	char filename[MAX_NAME]; // Nom du fichier json généré 
     int diag_id; // numéro du diagramme
+    
     octet fenpos= 0; // compteur pour parcourir le fen
     octet col = 0; // compteur pour parcourir le plateau
     octet i;
     
-    // Initialisation des pions évolutions
+    // initialisation des pions évolutions
 	initEvolution(&(plateau.evolution));
     
     // vérification du nombre d'arguments
@@ -105,7 +106,9 @@ int main(int argc, char *argv[]){
 				break;
             
             case '0' ... '9':
-                strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
+                if(strlen(fen_nbVide) < MAX_FENNB-1)
+					strncat(fen_nbVide, &fen[fenpos], 1); // Concatenation de chaque chiffre trouvé
+					
                 printf1("Nombre en cours : %s \n", fen_nbVide);
                 
                 // Si le suivant n'est pas un chiffre

@@ -1,7 +1,7 @@
 #define DEFAULT_NAME "diag.js"
 #define MAXCOMM 500
 #define MAX_FEN 100
-#define MAX_FENNB 4
+#define MAX_FENNB 3
 #define MAX_NAME 20
 
 #ifdef __DEBUG__
