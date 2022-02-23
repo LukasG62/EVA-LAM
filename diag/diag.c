@@ -9,6 +9,7 @@
 
 int main(int argc, char *argv[]){
     T_Position plateau;
+    plateau.trait = 0;
     
     char fen[MAX_FEN]; // code fen
     char fen_nbVide[MAX_FENNB] = ""; // Nombre de case vide indiqué dans le fen
