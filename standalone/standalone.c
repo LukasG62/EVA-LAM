@@ -123,12 +123,12 @@ int ecraserJson(T_Position p, T_Score s, char *flocation){
 }
 
 void saisirEvolution(T_Position *p) {
-	int pbonus; // Position des bonus
+	octet pbonus; // Position des bonus
 	// Placement des bonus/malus avec vérification des saisies
 
     do{ // Placement bonus Jaune
 		printf("\tbonusJ :");
-		scanf("%d",&pbonus);
+		scanf("%hhu",&pbonus);
 		p->evolution.bonusJ = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.bonusJ);
     }while(p->cols[pbonus].couleur != JAU);
@@ -137,7 +137,7 @@ void saisirEvolution(T_Position *p) {
     
     do{ // Placement bonus Rouge
 		printf("\tbonusR :");
-		scanf("%d",&pbonus);
+		scanf("%hhu",&pbonus);
 		p->evolution.bonusR = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.bonusR);
     }while(p->cols[pbonus].couleur != ROU );
@@ -146,7 +146,7 @@ void saisirEvolution(T_Position *p) {
 
     do{ // Placement malus Rouge
 		printf("\tmalusR :");
-		scanf("%d",&pbonus);
+		scanf("%hhu",&pbonus);
 		p->evolution.malusR = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.malusR);
     }while((p->evolution.malusR == p->evolution.bonusR) || (p->cols[pbonus].couleur != ROU));
@@ -154,7 +154,7 @@ void saisirEvolution(T_Position *p) {
     
     do{ // Placement malus Jaune
     	printf("\tmalusJ :");
-    	scanf("%d",&pbonus);
+    	scanf("%hhu",&pbonus);
     	p->evolution.malusJ = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.malusJ);
     }while((p->evolution.malusJ == p->evolution.bonusJ ) || (p->cols[pbonus].couleur != JAU));
