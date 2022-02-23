@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
 		getchar();getchar();
     }
 	 // Affichage des scores
+    afficherScore(score);
 
     if (score.nbJ > score.nbR)
     	printf("Le joueur Jaune a gagné !\n");
