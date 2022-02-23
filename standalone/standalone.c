@@ -18,18 +18,20 @@ int main(int argc, char *argv[]) {
     // Variable contenant le chemin du fichier json
     char file_location[MAX_FILELOCATION] = DEFAULT_LOCATION;
     
-    // Si il n'y pas au moins un argument alors on l'indique et on prend le chemin par défaut
+    // Chemin non spécifié
     if(argc < 2) printf("[Warning] Chemin non spécifié \n\n");
     else{
-	// Si il y a au moins un argument alors on vérifie sa taille
-	if(strlen(argv[1]) > MAX_FILELOCATION){
-	    // Dans le cas d'un paramètre non valide on termine le programme
-	    printf("Chemin spécifié trop long ! Fin du programme");
-	    return 1;
-	}
-	strcpy(file_location, argv[1]);
+	
+		// Vérification taille argument
+		if(strlen(argv[1]) > MAX_FILELOCATION){
+			
+			printf("Chemin spécifié trop long ! Fin du programme");
+			return 1; // Fin du programme 
+		}
+		strcpy(file_location, argv[1]);
     }
     
+    //MAJ du fichier js
     ecraserJson(plateau, score, file_location);
     
     printf("Emplacement du fichier js : '%s' \n", file_location);
@@ -37,8 +39,8 @@ int main(int argc, char *argv[]) {
     printf("\n");
     printf("Placement des bonus/malus :\n");
     
-    saisirEvolution(&plateau); // Demande de saisie des pions evolutions
-    score = evaluerScore(plateau); // Initialisation du score
+    saisirEvolution(&plateau);
+    score = evaluerScore(plateau);
     printf0("Fin de saisie des bonus, début de partie\n");
 	
     ecraserJson(plateau, score, file_location); // MAJ du fichier json
@@ -128,7 +130,7 @@ void saisirEvolution(T_Position *p) {
 
     do{ // Placement bonus Jaune
 		printf("\tbonusJ :");
-		scanf("%hhu",&pbonus);
+		scanf("%hhd",&pbonus);
 		p->evolution.bonusJ = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.bonusJ);
     }while(p->cols[pbonus].couleur != JAU);
@@ -137,7 +139,7 @@ void saisirEvolution(T_Position *p) {
     
     do{ // Placement bonus Rouge
 		printf("\tbonusR :");
-		scanf("%hhu",&pbonus);
+		scanf("%hhd",&pbonus);
 		p->evolution.bonusR = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.bonusR);
     }while(p->cols[pbonus].couleur != ROU );
@@ -146,7 +148,7 @@ void saisirEvolution(T_Position *p) {
 
     do{ // Placement malus Rouge
 		printf("\tmalusR :");
-		scanf("%hhu",&pbonus);
+		scanf("%hhd",&pbonus);
 		p->evolution.malusR = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.malusR);
     }while((p->evolution.malusR == p->evolution.bonusR) || (p->cols[pbonus].couleur != ROU));
@@ -154,7 +156,7 @@ void saisirEvolution(T_Position *p) {
     
     do{ // Placement malus Jaune
     	printf("\tmalusJ :");
-    	scanf("%hhu",&pbonus);
+    	scanf("%hhd",&pbonus);
     	p->evolution.malusJ = pbonus;
 		printf1("la valeur donnée est : %d\n",p->evolution.malusJ);
     }while((p->evolution.malusJ == p->evolution.bonusJ ) || (p->cols[pbonus].couleur != JAU));
