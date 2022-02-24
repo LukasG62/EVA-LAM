@@ -159,7 +159,7 @@ int main(int argc, char *argv[]){
 	printf1("Nom fichier saisie : %s \n", filename);
 
 	// Saisie du commentaire de la situation
-	printf("Rentrez les commentaires, attention max %d charactères : \n",MAXCOMM);
+	printf("Rentrez les commentaires, attention max %d caractères : \n",MAXCOMM);
 		
 	fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
 	printf1("\n%s\n", comm); // Affichage debug de la note
