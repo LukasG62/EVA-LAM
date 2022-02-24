@@ -137,7 +137,7 @@ int main(int argc, char *argv[]){
                 break;
             
             default:
-                fprintf(stderr,"[ERREUR] Charactère [%d]:%c non pris en charge, suite de l'analyse du FEN \n",fenpos, fen[fenpos]);
+                fprintf(stderr,"[ERREUR] Caractère [%d]:%c non pris en charge, suite de l'analyse du FEN \n",fenpos, fen[fenpos]);
                 break;
             
         }
