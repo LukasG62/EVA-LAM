@@ -22,9 +22,9 @@ int ecraserJson(T_Position p, T_Score s, char *flocation);
 //##################################################################################################
 //Fonction : saisirEvolution                                                                       #
 // Description : Permet de saisir les 4 pions                                                      #                   
-// Entrees : p:Le plateau de jeu, s: le score, flocation: le chemin du fichier                     #
-// Sorties : (/)                                                                                   #
-// Retourne : 0:échec, 1:succés                                                                    #
+// Entrees : *p: pointeur du plateau de jeu                                                        #
+// Sorties : la struture pointée est modifiée                                                      #
+// Retourne : (/)                                                                                  #
 //##################################################################################################
 void saisirEvolution(T_Position *p);
 
