@@ -48,11 +48,11 @@ int main(int argc, char *argv[]) {
         afficherScore(score);
 		printf("Trait aux %ss \n",COLNAME(plateau.trait));
 	
-		printf("\tQuel est la position du pion à déplacer :");
+		printf("\tQuelle est la position du pion à déplacer :");
 		scanf("%hhd",&coup.origine);
 		printf1("Le pion a déplacé est le numéro %d\n",coup.origine);
 	
-        printf("\tQuel est la position du pion d'arrivée :");   
+        printf("\tQuelle est la position du pion d'arrivée :");   
         scanf("%hhd",&coup.destination);
 		printf1("Le pion sur lequel va etre placé le pion est %d\n",coup.destination);
         
