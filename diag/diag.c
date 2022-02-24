@@ -162,7 +162,7 @@ int main(int argc, char *argv[]){
 	printf("Rentrez les commentaires, attention max %d charactères : \n",MAXCOMM);
 		
 	fread(comm, sizeof(comm), 1, stdin); // lecture du stdin
-	printf1("%s", comm); // Affichage debug de la note
+	printf1("\n%s\n", comm); // Affichage debug de la note
 	
 
 	if(!generer_json(plateau, diag_id, fen, comm, filename)) fprintf(stderr, "[ERREUR] Impossible d'ouvrir le fichier !");
