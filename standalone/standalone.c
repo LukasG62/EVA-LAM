@@ -184,6 +184,7 @@ void saisirEvolution(T_Position *p) {
 }
 
 void initScore(T_Score *ptrS){
+// Fonction permettant l'initialisation du score
 	ptrS->nbJ = 24;
 	ptrS->nbR = 24;
 	ptrS->nbJ5 = 0;
